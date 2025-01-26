@@ -1,6 +1,6 @@
 package cleancode.minesweeper.tobe.cell;
 
-public abstract class Cell2 {
+public abstract class Cell {
     // 하위 자식 Cell에서 사용하는 값은 protected로 열어준다.
 
     protected static final String FLAG_SIGN = "⚑";
@@ -9,10 +9,6 @@ public abstract class Cell2 {
     protected boolean isFlagged;
     protected boolean isOpened;
 
-
-    public abstract void turnOnLandMine();
-
-    public abstract void updateNearbyLandMineCount(int count);
 
     public void flag() {
         this.isFlagged = true;
