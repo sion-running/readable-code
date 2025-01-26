@@ -6,7 +6,7 @@ import cleancode.minesweeper.tobe.io.ConsoleOutputHandler;
 
 import java.util.Arrays;
 
-public class MineSweeper implements Game {
+public class MineSweeper implements GameInitializable, GameRunnable {
     private final GameBoard gameBoard;
     private final BoardIndexConverter boardIndexConverter = new BoardIndexConverter();
     private final ConsoleInputHandler consoleInputHandler = new ConsoleInputHandler();
