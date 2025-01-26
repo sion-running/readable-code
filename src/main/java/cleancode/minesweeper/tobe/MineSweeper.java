@@ -6,7 +6,7 @@ import cleancode.minesweeper.tobe.io.ConsoleOutputHandler;
 
 import java.util.Arrays;
 
-public class MineSweeper {
+public class MineSweeper implements Game {
     private final GameBoard gameBoard;
     private final BoardIndexConverter boardIndexConverter = new BoardIndexConverter();
     private final ConsoleInputHandler consoleInputHandler = new ConsoleInputHandler();
@@ -17,9 +17,14 @@ public class MineSweeper {
         gameBoard = new GameBoard(gameLevel);
     }
 
+    @Override
+    public void initialize() {
+        gameBoard.initializeGame();
+    }
+
+    @Override
     public void run() {
         consoleOutputHandler.showGameStartComments();
-        gameBoard.initializeGame();
 
         while (true) {
             try {

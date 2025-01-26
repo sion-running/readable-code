@@ -9,7 +9,9 @@ public class GameApplication {
 
     public static void main(String[] args) {
         GameLevel gameLevel = new Middle();
+
         MineSweeper sweeper = new MineSweeper(gameLevel);
+        sweeper.initialize();
         sweeper.run();
     }
 
