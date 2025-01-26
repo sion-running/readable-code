@@ -1,5 +1,8 @@
 package cleancode.minesweeper.tobe;
 
+import cleancode.minesweeper.tobe.io.ConsoleInputHandler;
+import cleancode.minesweeper.tobe.io.ConsoleOutputHandler;
+
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
@@ -8,26 +11,27 @@ public class MineSweeper {
 
     public static final int BOARD_ROW_SIZE = 8;
     public static final int BOARD_COL_SIZE = 10;
-    public static final Scanner SCANNER = new Scanner(System.in);
     private static final Cell[][] BOARD = new Cell[BOARD_ROW_SIZE][BOARD_COL_SIZE];
     private static final int LAND_MINE_COUNT = 10;
 
+    private final ConsoleInputHandler consoleInputHandler = new ConsoleInputHandler();
+    private final ConsoleOutputHandler consoleOutputHandler = new ConsoleOutputHandler();
     private int gameStatus = 0; // 0: 게임 중a, 1: 승리, -1: 패배
 
     public void run() {
-        showGameStartMessage();
+        consoleOutputHandler.showGameStartComments();
         initializeGame();
 
         while (true) {
             try {
-                showBoard();
+                consoleOutputHandler.showBoard(BOARD);
 
                 if (doesUserWinTheGame()) {
-                    System.out.println("지뢰를 모두 찾았습니다. GAME CLEAR!");
+                    consoleOutputHandler.printGameWinningComment();
                     break;
                 }
                 if (doesUserLoseTheGame()) {
-                    System.out.println("지뢰를 밟았습니다. GAME OVER!");
+                    consoleOutputHandler.printGameLosingComment();
                     break;
                 }
 
@@ -35,9 +39,9 @@ public class MineSweeper {
                 String userActionInput = getUserActionInputFromUser();
                 actOnCell(cellInput, userActionInput);
             } catch (AppException e) {
-                System.out.println(e.getMessage());
+                consoleOutputHandler.printExceptionMessage(e);
             } catch (Exception e) {
-                System.out.println("프로그램에 문제가 생겼습니다.");
+                consoleOutputHandler.printSimpleMessage("프로그램에 문제가 생겼습니다.");
             }
         }
     }
@@ -94,13 +98,13 @@ public class MineSweeper {
     }
 
     private String getUserActionInputFromUser() {
-        System.out.println("선택한 셀에 대한 행위를 선택하세요. (1: 오픈, 2: 깃발 꽂기)");
-        return SCANNER.nextLine();
+        consoleOutputHandler.printCommentForUserAction();
+        return consoleInputHandler.getUserInput();
     }
 
     private String getCellInputFromUser() {
-        System.out.println("선택할 좌표를 입력하세요. (예: a1)");
-        return SCANNER.nextLine();
+        consoleOutputHandler.printCommentForSelectingCell();
+        return consoleInputHandler.getUserInput();
     }
 
     private boolean doesUserLoseTheGame() {
@@ -165,17 +169,6 @@ public class MineSweeper {
         }
     }
 
-    private void showBoard() {
-        System.out.println("   a b c d e f g h i j");
-        for (int row = 0; row < BOARD_ROW_SIZE; row++) {
-            System.out.printf("%d  ", row + 1);
-            for (int col = 0; col < BOARD_COL_SIZE; col++) {
-                System.out.print(BOARD[row][col].getSign() + " ");
-            }
-            System.out.println();
-        }
-    }
-
     private void initializeGame() {
         for (int row = 0; row < BOARD_ROW_SIZE; row++) {
             for (int col = 0; col < BOARD_COL_SIZE; col++) {
@@ -228,12 +221,6 @@ public class MineSweeper {
             count++;
         }
         return count;
-    }
-
-    private void showGameStartMessage() {
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        System.out.println("지뢰찾기 게임 시작!");
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
     }
 
     private void open(int row, int col) {
